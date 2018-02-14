@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.intercomics.mapper.SubscribeRepository">
+
+	<select id="listSubscibe" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<include refid="userFilter"></include>
+		<include refid="OrderbyNew"></include>
+		<include refid="perScroll"></include>
+	</select>
+	
+	<select id="subscibeLastNum" resultType="int">
+		<include refid="countWebtoon"></include>
+		where
+		<include refid="userFilter"></include>
+		<include refid="OrderbyNew"></include>
+	</select>
+
+	<select id="timestampSubscibe" resultType="java.sql.Timestamp">
+	<include refid="timestampWebtoon"></include>
+		where
+		<include refid="userFilter"></include>
+		<include refid="OrderbyNewTimestamp"></include>
+		limit 1
+	</select>
+
+	<sql id="listWebtoon">
+	<![CDATA[  
+	   select * from
+		(SELECT * from
+		mywebtoon natural join day
+		where
+	]]>
+		<include refid="dayFilter"></include>
+	<![CDATA[ 
+		)subscribe 
+        natural join webtoon
+		natural join platform
+		natural join writer
+		natural join genre
+	]]>
+
+	</sql>
+	
+		<sql id="countWebtoon">
+	<![CDATA[  
+	   select count(*) from
+		(SELECT * from
+		mywebtoon natural join day
+		where
+	]]>
+		<include refid="dayFilter"></include>
+	<![CDATA[ 
+		)subscribe 
+        natural join webtoon
+		natural join platform
+		natural join writer
+		natural join genre
+	]]>
+
+	</sql>
+	
+	<sql id="timestampWebtoon">
+	<![CDATA[  
+	   select timestamp from
+		(SELECT * from
+		mywebtoon natural join day
+		where
+	]]>
+		<include refid="dayFilter"></include>
+	<![CDATA[ 
+		)subscribe 
+        natural join webtoon
+		natural join platform
+		natural join writer
+		natural join genre
+	]]>
+
+	</sql>
+
+	<sql id="includePlatformFilter">
+		platform IN
+		<foreach collection="platforms" item="item" index="index"
+			separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</sql>
+
+	<sql id="dayFilter">
+		day LIKE CONCAT('%',#{day},'%')
+		<if test="day eq '8'.toString()">
+			OR day LIKE '%9%'
+		</if>
+	</sql>
+
+
+	<sql id="isNew">
+		isNew = true
+	</sql>
+
+	<sql id="genreFilter">
+		genre = #{genre}
+	</sql>
+
+	<sql id="platformFilter">
+		platform = #{platform}
+	</sql>
+
+	<sql id="webtoonIdFilter">
+		webtoonId = #{webtoonId}
+	</sql>
+
+	<sql id="writerFilter">
+		writer = #{writer}
+	</sql>
+
+	<sql id="OrderbyTrending">
+		order by viewCount desc
+	</sql>
+
+	<sql id="OrderbyNew">
+		order by lastDate desc
+	</sql>
+	
+	<sql id="OrderbyNewTimestamp">
+		order by timestamp desc
+	</sql>
+
+	<sql id="userFilter">
+		userId = #{userId}
+	</sql>
+
+
+	<sql id="perScroll">
+		limit #{scrollStart}, #{perScrollNum}
+	</sql>
+
+	<select id="evaluateList" resultType="RelationshipVO">
+		select * from evaluation
+		where rating != -1
+	</select>
+
+</mapper>

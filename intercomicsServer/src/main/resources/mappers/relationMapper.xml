@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.intercomics.mapper.RelationMapper">
+
+	<insert id="evaluateToon">
+		insert into evaluation 
+		(user_id, webtoon_id, rating) 
+		values(#{user_id}, #{webtoon_id}, #{rating}) on duplicate key update user_id=#{user_id}, webtoon_id=#{webtoon_id}, rating=#{rating};
+	</insert>
+	
+	<update id="updateRating">
+		update evaluation 
+		set rating = #{rating} 
+		where user_id = #{user_id} 
+		and webtoon_id = #{webtoon_id}
+	</update>
+	
+	<delete id="deleteRating">
+		delete from evaluation 
+		where user_id = #{user_id} 
+		and webtoon_id = #{webtoon_id}
+	</delete>
+	
+	<insert id="subscribe">
+		insert into mywebtoon 
+		values(#{user_id}, #{webtoon_id})
+	</insert>
+	
+	<delete id="deleteSubscribe">
+		delete from mywebtoon 
+		where userId = #{user_id} and webtoonId = #{webtoon_id}
+	</delete>
+
+	<select id="recommendList" resultType="org.intercomics.domain.WebtoonVO">
+		select * from webtoon, evaluation 
+		where rating != -1 
+		and webtoon.webtoonId = evaluation.webtoon_id 
+		order by rand() limit #{startNo}, #{num}
+	</select>
+	
+	<select id="isSubscribe" resultType="Integer">
+		select count(*) from mywebtoon 
+		where userId = #{user_id} 
+		and webtoonId = #{webtoon_id}
+	</select>
+		
+</mapper>

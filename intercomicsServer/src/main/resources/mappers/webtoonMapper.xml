@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.intercomics.mapper.WebtoonRepository">
+
+	<select id="listPerDayPlatformScroll" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<include refid="dayFilter"></include>
+
+		<if test="!(allPlatform eq 'all'.toString())">
+			and
+			<include refid="includePlatformFilter"></include>
+		</if>
+		<include refid="OrderbyNew"></include>
+		<include refid="perScroll"></include>
+	</select>
+
+	<select id="listOrderbyIsNewScroll" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<include refid="dayFilter"></include>
+		<if test="!(allPlatform eq 'all'.toString())">
+			and
+			<include refid="includePlatformFilter"></include>
+		</if>
+		and
+		<include refid="isNew"></include>
+		<include refid="OrderbyNew"></include>
+		<include refid="perScroll"></include>
+	</select>
+
+	<select id="OrderbyIsNewLastNum" resultType="int">
+		<include refid="countWebtoon"></include>
+		where
+		<include refid="dayFilter"></include>
+		<if test="!(allPlatform eq 'all'.toString())">
+			and
+			<include refid="includePlatformFilter"></include>
+		</if>
+		and
+		<include refid="isNew"></include>
+		<include refid="OrderbyNew"></include>
+	</select>
+
+
+	<select id="timestampOrderbyIsNewScroll" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<include refid="dayFilter"></include>
+		<if test="!(allPlatform eq 'all'.toString())">
+			and
+			<include refid="includePlatformFilter"></include>
+		</if>
+		and
+		<include refid="isNew"></include>
+		<include refid="OrderbyNew"></include>
+		limit 1
+	</select>
+
+	<select id="listPerDayAllPlatformScroll" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<include refid="dayFilter"></include>
+		<!-- and -->
+		<include refid="perScroll"></include>
+	</select>
+
+
+	<select id="listOrderbyTrendingScroll" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<if test="!(allPlatform eq 'all'.toString())">
+			<include refid="includePlatformFilter"></include>
+			and
+		</if>
+		<include refid="dayFilter"></include>
+
+		<include refid="OrderbyTrending"></include>
+		<include refid="perScroll"></include>
+	</select>
+
+	<select id="OrderbyTrendingLastNum" resultType="int">
+		<include refid="countWebtoon"></include>
+		where
+		<if test="!(allPlatform eq 'all'.toString())">
+			<include refid="includePlatformFilter"></include>
+			and
+		</if>
+		<include refid="dayFilter"></include>
+
+		<include refid="OrderbyTrending"></include>
+	</select>
+
+	<select id="timestampOrderbyTrendingScroll" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<if test="!(allPlatform eq 'all'.toString())">
+			<include refid="includePlatformFilter"></include>
+			and
+		</if>
+		<include refid="dayFilter"></include>
+		<include refid="OrderbyNew"></include>
+		limit 1
+	</select>
+
+
+	<select id="listOrderbySubscriptionsScroll" resultType="WebtoonVO">
+		select * from
+		(SELECT webtoonId , count(*) as subscriptionCount from
+		mywebtoon
+		group by webtoonId order by count(*) desc) mywebtoon
+		natural
+		join
+		webtoon
+		natural join day
+		natural join platform
+		natural join writer
+		natural join genre
+
+		where
+		<if test="!(allPlatform eq 'all'.toString())">
+			<include refid="includePlatformFilter"></include>
+			and
+		</if>
+		<include refid="dayFilter"></include>
+		order by subscriptionCount desc
+	</select>
+
+	<select id="OrderbySubscriptionsLastNum" resultType="int">
+		select count(*) from
+		(SELECT webtoonId , count(*) as subscriptionCount
+		from
+		mywebtoon
+		group by webtoonId order by count(*) desc) mywebtoon
+		natural
+		join
+		webtoon
+		natural join day
+		natural join platform
+		natural join
+		writer
+		natural join genre
+
+		where
+		<if test="!(allPlatform eq 'all'.toString())">
+			<include refid="includePlatformFilter"></include>
+			and
+		</if>
+		<include refid="dayFilter"></include>
+		order by subscriptionCount desc
+		<include refid="perScroll"></include>
+	</select>
+
+
+
+	<select id="timestampOrderbySubscriptionsScroll" resultType="WebtoonVO">
+		select * from
+		(SELECT webtoonId , count(*) as subscriptionCount from
+		mywebtoon
+		group by webtoonId order by count(*) desc) mywebtoon
+		natural
+		join
+		webtoon
+		natural join day
+		natural join platform
+		natural join writer
+		natural join genre
+
+		where
+		<if test="!(allPlatform eq 'all'.toString())">
+			<include refid="includePlatformFilter"></include>
+			and
+		</if>
+		<include refid="dayFilter"></include>
+		<include refid="OrderbyNew"></include>
+		limit 1
+	</select>
+
+	<select id="listOrderbyNewUpdateScroll" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<if test="!(allPlatform eq 'all'.toString())">
+			<include refid="includePlatformFilter"></include>
+			and
+		</if>
+		<include refid="dayFilter"></include>
+		<include refid="OrderbyNew"></include>
+		<include refid="perScroll"></include>
+	</select>
+
+	<select id="OrderbyNewUpdateLastNum" resultType="int">
+		<include refid="countWebtoon"></include>
+		where
+		<if test="!(allPlatform eq 'all'.toString())">
+			<include refid="includePlatformFilter"></include>
+			and
+		</if>
+		<include refid="dayFilter"></include>
+		<include refid="OrderbyNew"></include>
+	</select>
+
+
+
+	<select id="timestampOrderbyNewUpdateScroll" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<if test="!(allPlatform eq 'all'.toString())">
+			<include refid="includePlatformFilter"></include>
+			and
+		</if>
+		<include refid="dayFilter"></include>
+		<include refid="OrderbyNew"></include>
+		limit 1
+	</select>
+
+
+	<select id="listOrderbyGenreScroll" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<include refid="genreFilter"></include>
+		order by lastDate desc
+		<include refid="perScroll"></include>
+	</select>
+
+
+
+
+	<select id="getWebToonByPlayform" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<include refid="platformFilter"></include>
+	</select>
+
+
+	<select id="searchWebtoon" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<include refid="webtoonNameFilter"></include>
+		or
+		<include refid="writerFilter"></include>
+		<include refid="perScroll"></include>
+	</select>
+
+	<select id="searchWebtoonLastNum" resultType="int">
+		<include refid="countWebtoon"></include>
+		where
+		<include refid="webtoonNameFilter"></include>
+		or
+		<include refid="writerFilter"></include>
+	</select>
+
+	<select id="getInformation" resultType="WebtoonVO">
+		<include refid="listWebtoon"></include>
+		where
+		<include refid="webtoonIdFilter"></include>
+
+	</select>
+
+	<sql id="countWebtoon">
+		<![CDATA[  
+		select count(*) from webtoon
+		 natural join day 
+		 natural join platform 
+		 natural join writer 
+		 natural join genre 
+		]]>
+	</sql>
+
+	<sql id="listWebtoon">
+		<![CDATA[  
+		select * from webtoon
+		 natural join day 
+		 natural join platform 
+		 natural join writer 
+		 natural join genre 
+		]]>
+	</sql>
+
+	<sql id="includePlatformFilter">
+		platform IN
+		<foreach collection="platforms" item="item" index="index"
+			separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</sql>
+
+	<sql id="dayFilter">
+		<if test="day!=null">
+			<choose>
+				<when test="!(day eq '0'.toString())">
+					day LIKE CONCAT('%',#{day},'%')
+				</when>
+				<otherwise>
+					<include refid="isNew"></include>
+				</otherwise>
+			</choose>
+		</if>
+		<if test="day == null">
+			day Like '%'
+		</if>
+	</sql>
+
+
+	<sql id="isNew">
+		isNew = true
+	</sql>
+
+	<sql id="genreFilter">
+		genre = #{genre}
+	</sql>
+
+	<sql id="platformFilter">
+		platform = #{platform}
+	</sql>
+
+	<sql id="webtoonIdFilter">
+		webtoonId = #{webtoonId}
+	</sql>
+
+	<sql id="webtoonNameFilter">
+		webtoonName LIKE CONCAT('%',#{writer},'%')
+	</sql>
+
+	<sql id="writerFilter">
+		writer LIKE CONCAT('%',#{writer},'%')
+	</sql>
+
+	<sql id="OrderbyTrending">
+		order by viewCount desc
+	</sql>
+
+	<sql id="OrderbyNew">
+		order by lastDate desc
+	</sql>
+
+
+	<sql id="perScroll">
+		limit #{scrollStart}, #{perScrollNum}
+	</sql>
+
+	<select id="evaluateList" resultType="RelationshipVO">
+		select * from evaluation
+		where rating != -1
+	</select>
+
+</mapper>
