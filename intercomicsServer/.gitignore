@@ -8,8 +8,8 @@ target/
 .project
 .settings
 .springBeans
-./src/main/resources/jdbc.properties
-./src/main/resources/jwt.properties
+src/main/resources/jdbc.properties
+src/main/resources/jwt.properties
 
 ### IntelliJ IDEA ###
 .idea
