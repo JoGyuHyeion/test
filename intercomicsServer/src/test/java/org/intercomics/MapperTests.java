@@ -52,10 +52,10 @@ public class MapperTests {
 
 	}
 
-	// @Test
+//	 @Test
 	public void episodeAfterNo() throws Exception {
 		cri.setWebtoonId("00565e03-f149-4df2-9a65-2fe62a87d413");
-		cri.setEpisodeNo(22);
+		cri.setEpisodeNo(1);
 
 		List<EpisodeVO> list = episodeRepository.afterEpisodeNoScroll(cri);
 		System.out.println(list.size());

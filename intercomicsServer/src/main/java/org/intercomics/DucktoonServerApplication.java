@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -19,6 +20,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableAuthorizationServer
 @SpringBootApplication
 @MapperScan(value= {"org.intercomics.mapper"})
+@PropertySource(value = { "classpath:application.properties",  "classpath:${jdbc.config}","classpath:${jwt.config}" })
 public class DucktoonServerApplication {
 	
 	@Autowired

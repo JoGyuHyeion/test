@@ -41,7 +41,7 @@ public class DuctoonBootApplicationTests {
 		System.out.println(sdf.format(date));
 	}
 
-	// @Test
+//	 @Test
 	public void testConnection() throws Exception {
 		System.out.println(ds);
 		Connection con = ds.getConnection();
