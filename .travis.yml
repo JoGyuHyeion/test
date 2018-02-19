@@ -11,7 +11,7 @@ cache:
     directories: 
         - '$HOME/pom.xml' 
         
-    script: "mvn install" 
+    script: "mvn package" 
     
 # CI 실행 완료시 메일로 알람 
 notifications: 
