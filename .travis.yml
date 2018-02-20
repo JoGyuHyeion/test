@@ -27,7 +27,9 @@ deploy:
     wait-until-deployed: true 
     on: 
         repo: JoGyuHyeion/test #Github 주소 
-        branch: master
+        branch: 
+            only:
+            - dev
 
     
 # CI 실행 완료시 메일로 알람 
