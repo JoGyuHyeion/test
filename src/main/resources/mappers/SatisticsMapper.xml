@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.intercomics.mapper.SatisticsRepository">
+
+
+
+	<select id="getStatisticsByPlayform" resultType="StatisticsVO">
+		select platform as name,count(platform)as count from
+		(SELECT * from
+		recentwebtoon
+		natural join day
+		where day Like '%'
+		)subscribe
+		natural join webtoon
+		natural join platform
+		natural join writer
+		natural join
+		genre
+		where
+		<include refid="userFilter"></include>
+		group by platform order by count desc
+		<include refid="perScroll"></include>
+	</select>
+
+	<select id="getStatisticsByGenre" resultType="StatisticsVO">
+		select genre as name,count(genre)as count from
+		(SELECT * from
+		recentwebtoon natural
+		join day
+		where day Like '%'
+		)subscribe
+		natural join webtoon
+		natural join platform
+		natural join writer
+		natural join
+		genre
+		where
+		<include refid="userFilter"></include>
+		group by genre order by count desc
+		<include refid="perScroll"></include>
+	</select>
+
+	<sql id="userFilter">
+		userId = #{userId}
+	</sql>
+
+
+	<sql id="perScroll">
+		limit #{scrollStart}, #{perScrollNum}
+	</sql>
+
+
+</mapper>

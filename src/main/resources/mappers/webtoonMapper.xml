@@ -341,9 +341,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		limit #{scrollStart}, #{perScrollNum}
 	</sql>
 
-	<select id="evaluateList" resultType="RelationshipVO">
-		select * from evaluation
-		where rating != -1
-	</select>
 
 </mapper>

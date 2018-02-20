@@ -16,14 +16,14 @@ public interface SubscribeRepository {
 
 	@Delete("delete from mywebtoon where userId = #{userId} and webtoonId = #{webtoonId}")
 	public void removeSubscribe(MywebtoonVO vo) throws Exception;
-	
+
 	@Select("select * from mywebtoon where userId = #{userId} and webtoonId = #{webtoonId}")
 	public WebtoonVO isSubscibe(MywebtoonVO vo) throws Exception;
-	
+
 	public List<WebtoonVO> listSubscibe(SearchCriteria cri) throws Exception;
-	
+
 	public int subscibeLastNum(SearchCriteria cri) throws Exception;
-	
+
 	public Timestamp timestampSubscibe(SearchCriteria cri) throws Exception;
-	
+
 }

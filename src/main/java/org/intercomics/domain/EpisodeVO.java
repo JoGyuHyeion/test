@@ -1,7 +1,5 @@
 package org.intercomics.domain;
 
-import java.sql.Timestamp;
-import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
@@ -14,8 +12,8 @@ public class EpisodeVO {
 	private String episodeName;
 	private String episodeThumbnail_s;
 	private String episodeLink;
-	private Date episodeDate;
-	private Timestamp episodeTimestamp;
+	private String episodeDate;
+	private String episodeTimestamp;
 	private String episodecol;
 
 	public int getEpisodeNo() {
@@ -66,19 +64,19 @@ public class EpisodeVO {
 		this.episodeLink = episodeLink;
 	}
 
-	public Date getEpisodeDate() {
+	public String getEpisodeDate() {
 		return episodeDate;
 	}
 
-	public void setEpisodeDate(Date episodeDate) {
+	public void setEpisodeDate(String episodeDate) {
 		this.episodeDate = episodeDate;
 	}
 
-	public Timestamp getEpisodeTimestamp() {
+	public String getEpisodeTimestamp() {
 		return episodeTimestamp;
 	}
 
-	public void setEpisodeTimestamp(Timestamp episodeTimestamp) {
+	public void setEpisodeTimestamp(String episodeTimestamp) {
 		this.episodeTimestamp = episodeTimestamp;
 	}
 

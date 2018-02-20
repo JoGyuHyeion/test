@@ -28,6 +28,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		limit 1
 	</select>
 
+	<select id="getStatisticsByPlayform" resultType="StatisticsVO">
+		select platform as name,count(platform)as count from
+		(SELECT * from
+		recentwebtoon
+		natural join day
+		where day Like '%'
+		)subscribe
+		natural join webtoon
+		natural join platform
+		natural join writer
+		natural join
+		genre
+		where
+		<include refid="userFilter"></include>
+		group by platform order by count desc
+		<include refid="perScroll"></include>
+	</select>
+
+	<select id="getStatisticsByGenre" resultType="StatisticsVO">
+		select genre as name,count(genre)as count from
+		(SELECT * from
+		recentwebtoon natural
+		join day
+		where day Like '%'
+		)subscribe
+		natural join webtoon
+		natural join platform
+		natural join writer
+		natural join
+		genre
+		where
+		<include refid="userFilter"></include>
+		group by genre order by count desc
+		<include refid="perScroll"></include>
+	</select>
+
+
 	<sql id="listWebtoon">
 	<![CDATA[  
 	   select * from
@@ -139,9 +176,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		limit #{scrollStart}, #{perScrollNum}
 	</sql>
 
-	<select id="evaluateList" resultType="RelationshipVO">
-		select * from evaluation
-		where rating != -1
-	</select>
 
 </mapper>

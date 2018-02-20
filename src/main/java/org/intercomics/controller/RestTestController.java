@@ -2,11 +2,9 @@ package org.intercomics.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,15 +34,5 @@ public class RestTestController {
 		return entity;
 	}
 
-	@RequestMapping(path = "/test1")
-	public String test(Authentication authentication) {
-		System.out.println(authentication.getName());
-		System.out.println(authentication.getCredentials());
-		System.out.println(authentication.getDetails());
-		System.out.println(authentication.getPrincipal());
-		System.out.println(authentication.getAuthorities());
-		System.out.println(authentication.getClass());
-		return authentication.getName();
-	}
 
 }
