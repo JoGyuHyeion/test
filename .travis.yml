@@ -16,9 +16,10 @@ cache:
        
     script: "./mvnw package" 
 
-# before_deploy: - zip -r intercomics * 
-#   - mkdir -p deploy 
-#   - mv intercomics.zip deploy/intercomics.zip
+before_deploy: 
+  - zip -r intercomics * 
+  - mkdir -p deploy 
+  - mv intercomics.zip deploy/intercomics.zip
 
 deploy: 
   - provider: s3 
