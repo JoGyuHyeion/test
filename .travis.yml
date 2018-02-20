@@ -26,10 +26,8 @@ deploy:
     acl: public_read 
     wait-until-deployed: true 
     on: 
-        repo: JoGyuHyeion/test #Github 주소 
-        branch: 
-            only:
-            - master
+      repo: JoGyuHyeion/test #Github 주소 
+      branch: master
 
     
 # CI 실행 완료시 메일로 알람 
