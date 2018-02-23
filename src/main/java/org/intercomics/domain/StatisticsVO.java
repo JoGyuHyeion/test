@@ -1,28 +1,29 @@
 package org.intercomics.domain;
 
 public class StatisticsVO {
-	private String name;
-	private int count;
 
-	public String getName() {
-		return name;
+	private String type;
+	private int value;
+
+	public String getType() {
+		return type;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public int getCount() {
-		return count;
+	public int getValue() {
+		return value;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setValue(int value) {
+		this.value = value;
 	}
 
 	@Override
 	public String toString() {
-		return "StatisticsVO [name=" + name + ", count=" + count + "]";
+		return "StatisticsVO [type=" + type + ", value=" + value + "]";
 	}
 
 }

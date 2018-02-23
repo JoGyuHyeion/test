@@ -6,7 +6,7 @@ import org.intercomics.domain.StatisticsVO;
 
 public interface SatisticsRepository {
 	
-	public List<StatisticsVO> getStatisticsByPlayform(SearchCriteria cri) throws Exception;
+	public List<StatisticsVO> getStatisticsByPlatform(SearchCriteria cri) throws Exception;
 	
 	public List<StatisticsVO> getStatisticsByGenre(SearchCriteria cri) throws Exception;
 

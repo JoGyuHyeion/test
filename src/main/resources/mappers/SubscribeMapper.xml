@@ -126,14 +126,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{item}
 		</foreach>
 	</sql>
-
+	
 	<sql id="dayFilter">
-		day LIKE CONCAT('%',#{day},'%')
-		<if test="day eq '8'.toString()">
-			OR day LIKE '%9%'
+		<if test="day!=null">
+			<choose>
+				<when test="!(day eq '0'.toString())">
+					day LIKE CONCAT('%',#{day},'%')
+				</when>
+				<when test="day eq '8'.toString()">
+					OR day LIKE '%9%'
+				</when>
+			</choose>
+		</if>
+		<if test="day == null">
+			day Like '%'
 		</if>
 	</sql>
-
+		
 
 	<sql id="isNew">
 		isNew = true

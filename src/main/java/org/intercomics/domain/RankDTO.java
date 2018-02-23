@@ -5,7 +5,7 @@ import java.util.List;
 public class RankDTO {
 
 	private String name;
-	private List<WebtoonVO> ranks;
+	private List<RankVO> ranks;
 
 	public String getName() {
 		return name;
@@ -15,11 +15,11 @@ public class RankDTO {
 		this.name = name;
 	}
 
-	public List<WebtoonVO> getRanks() {
+	public List<RankVO> getRanks() {
 		return ranks;
 	}
 
-	public void setRanks(List<WebtoonVO> ranks) {
+	public void setRanks(List<RankVO> ranks) {
 		this.ranks = ranks;
 	}
 

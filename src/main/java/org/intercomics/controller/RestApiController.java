@@ -16,13 +16,16 @@ import org.intercomics.domain.BoardVO;
 import org.intercomics.domain.EpisodeVO;
 import org.intercomics.domain.MywebtoonVO;
 import org.intercomics.domain.RankDTO;
+import org.intercomics.domain.RankVO;
 import org.intercomics.domain.RecentWebtoonVO;
 import org.intercomics.domain.WebtoonVO;
 import org.intercomics.mapper.BoardRepository;
 import org.intercomics.mapper.EpisodeRepository;
+import org.intercomics.mapper.RankRepository;
 import org.intercomics.mapper.RecentWebtoonRepository;
 import org.intercomics.mapper.SatisticsRepository;
 import org.intercomics.mapper.SubscribeRepository;
+import org.intercomics.mapper.UserRepository;
 import org.intercomics.mapper.WebtoonRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +52,12 @@ public class RestApiController {
 	private RecentWebtoonRepository recentWebtoonRepository;
 	@Autowired
 	private SatisticsRepository satisticsRepository;
-	
+	@Autowired
+	private UserRepository userRepository;
 	@Autowired
 	private BoardRepository boardRepository;
+	@Autowired
+	private RankRepository rankRepository;
 
 	@Resource(name = "MywebtoonVO")
 	private MywebtoonVO mywebtoonVO;
@@ -93,25 +99,28 @@ public class RestApiController {
 
 		return mapPlatform;
 	}
-	
+
 	// 통계
 	@RequestMapping(value = "/statistics", method = RequestMethod.GET)
-	public ResponseEntity<List<StatisticsDTO>> getStatistics(SearchCriteria cri, HttpServletRequest request)
+	public ResponseEntity<Map<String, Object>> getStatistics(SearchCriteria cri, HttpServletRequest request)
 			throws Exception {
 
 		System.out.println("/statistics -GET  : " + sdf.format(date));
+		String userId = getUserId(request.getHeader("x-token"));
+		cri.setUserId(userId);
+		ResponseEntity<Map<String, Object>> entity = null;
+		Map<String, Object> statistic = new HashMap<String, Object>();
 
-		cri.setUserId(getUserId(request.getHeader("x-token")));
-		ResponseEntity<List<StatisticsDTO>> entity = null;
-		List<StatisticsDTO> rank = new ArrayList<StatisticsDTO>();
 		try {
 			cri.setAllPlatform("all");
-			cri.setPerScrollNum(10);
+			cri.setPerScrollNum(5);
 
-			rank.add(getStatisticsDTO("장르 통계", satisticsRepository.getStatisticsByGenre(cri)));
-			rank.add(getStatisticsDTO("플랫폼 통계", satisticsRepository.getStatisticsByPlayform(cri)));
+			statistic.put("genre", satisticsRepository.getStatisticsByGenre(cri));
+			statistic.put("platforms", satisticsRepository.getStatisticsByPlatform(cri));
+			statistic.put("subscribe", subscribeRepository.subscibeLastNum(cri));
+			statistic.put("episode", userRepository.findByUserId(userId).getEpisodeCount());
 
-			entity = new ResponseEntity<List<StatisticsDTO>>(rank, HttpStatus.OK);
+			entity = new ResponseEntity<Map<String, Object>>(statistic, HttpStatus.OK);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,7 +128,6 @@ public class RestApiController {
 		}
 		return entity;
 	}
-
 
 	// 구독 토글 - 등록
 	@RequestMapping(value = "/subscribe/{webtoonId}", method = RequestMethod.POST)
@@ -200,7 +208,7 @@ public class RestApiController {
 		return entity;
 	}
 
-	private RankDTO getRankDTO(String rankName, List<WebtoonVO> webtoonList) {
+	private RankDTO getRankDTO(String rankName, List<RankVO> webtoonList) {
 
 		RankDTO rankDTO = new RankDTO();
 		rankDTO.setName(rankName);
@@ -208,20 +216,21 @@ public class RestApiController {
 
 		return rankDTO;
 	}
-	
+
 	private StatisticsDTO getStatisticsDTO(String rankName, List<StatisticsVO> webtoonList) {
 
 		StatisticsDTO dto = new StatisticsDTO();
 		dto.setName(rankName);
 		dto.setRanks(webtoonList);
-		
+
 		return dto;
 	}
 
 
+
 	// 웹툰리스트 - 플랫폼, 인기순 구독순 최신순 요청
 	@RequestMapping(value = "/rank", method = RequestMethod.GET)
-	public ResponseEntity<List<RankDTO>> webToonOrderbyRankScrollList(SearchCriteria cri) {
+	public ResponseEntity<List<RankDTO>> webToonTop10RankList(SearchCriteria cri) {
 
 		System.out.println("/rank -GET : " + sdf.format(date));
 
@@ -229,12 +238,13 @@ public class RestApiController {
 
 		List<RankDTO> rank = new ArrayList<RankDTO>();
 		try {
-			cri.setAllPlatform("all");
-			cri.setPerScrollNum(10);
+			List<RankVO> subscribeWebtoon =rankRepository.getList("subscribeWebtoon");
+			List<RankVO> viewCount =rankRepository.getList("viewCount");
+			List<RankVO> finishWebtoon =rankRepository.getList("finishWebtoon");
 
-			rank.add(getRankDTO("구독순 top10", webtoonRepository.listOrderbySubscriptionsScroll(cri)));
-			rank.add(getRankDTO("인기순 top10", webtoonRepository.listOrderbyTrendingScroll(cri)));
-			rank.add(getRankDTO("신작순 top10", webtoonRepository.listOrderbyNewUpdateScroll(cri)));
+			rank.add(getRankDTO("구독순 top10", subscribeWebtoon));
+			rank.add(getRankDTO("조회순 top10", viewCount));
+			rank.add(getRankDTO("완결 top10", finishWebtoon));
 
 			entity = new ResponseEntity<List<RankDTO>>(rank, HttpStatus.OK);
 
@@ -507,7 +517,13 @@ public class RestApiController {
 				}
 
 			} else if (orderby.equals("desc")) {
-				calOrderby = (lastNum - recentEpNum - cri.getEpisodeNo() + 1);
+
+				if (lastNum - recentEpNum == 0) {
+					calOrderby = (lastNum - cri.getEpisodeNo() + 1);
+				} else {
+					calOrderby = (lastNum - recentEpNum - cri.getEpisodeNo() + 1);
+				}
+
 				perScrollNum = calOrderby > 0 && recentEpNum != 0 ? calOrderby : defaultPerScrollNum;
 				cri.setPerScrollNum(perScrollNum);
 				if (((lastNum - perScrollNum) <= cri.getEpisodeNo()) && (cri.getEpisodeNo() < lastNum)) {
@@ -550,15 +566,16 @@ public class RestApiController {
 
 		ResponseEntity<String> entity = null;
 		try {
-			 String userId = getUserId(request.getHeader("x-token"));
+			String userId = getUserId(request.getHeader("x-token"));
 			webtoonRepository.updateViewCount(webtoonId);
-			 recentWebtoonVO = recentWebtoonRepository.getRecentWebtoon(webtoonId,userId);
-			 if (recentWebtoonVO == null) {
-			 recentWebtoonRepository.addRecentWebtoon(webtoonId, userId, episodeNo);
-			 } else {
-			 recentWebtoonRepository.updateDateTime(webtoonId, userId, episodeNo);
-			 }
-//			 유저마다 리센트 테이블에 웹툰이 없으면 insert 있으면 datatime 업데이트
+			userRepository.episodeCount(userId);
+			recentWebtoonVO = recentWebtoonRepository.getRecentWebtoon(webtoonId, userId);
+			if (recentWebtoonVO == null) {
+				recentWebtoonRepository.addRecentWebtoon(webtoonId, userId, episodeNo);
+			} else {
+				recentWebtoonRepository.updateDateTime(webtoonId, userId, episodeNo);
+			}
+			// 유저마다 리센트 테이블에 웹툰이 없으면 insert 있으면 datatime 업데이트
 
 			entity = new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {

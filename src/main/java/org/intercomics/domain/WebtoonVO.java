@@ -2,12 +2,18 @@ package org.intercomics.domain;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Component("WebtoonVO")
 public class WebtoonVO {
 
 	private String webtoonId;
 	private String webtoonName;
 	private String webtoonThumbnail_s;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String webtoonThumbnail_m;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String webtoonThumbnail_b;
 	private String webtoonIntroduce;
 	private int isNew;
 	private String lastDate;
@@ -40,6 +46,22 @@ public class WebtoonVO {
 
 	public void setWebtoonThumbnail_s(String webtoonThumbnail_s) {
 		this.webtoonThumbnail_s = webtoonThumbnail_s;
+	}
+
+	public String getWebtoonThumbnail_m() {
+		return webtoonThumbnail_m;
+	}
+
+	public void setWebtoonThumbnail_m(String webtoonThumbnail_m) {
+		this.webtoonThumbnail_m = webtoonThumbnail_m;
+	}
+
+	public String getWebtoonThumbnail_b() {
+		return webtoonThumbnail_b;
+	}
+
+	public void setWebtoonThumbnail_b(String webtoonThumbnail_b) {
+		this.webtoonThumbnail_b = webtoonThumbnail_b;
 	}
 
 	public String getWebtoonIntroduce() {
@@ -117,7 +139,8 @@ public class WebtoonVO {
 	@Override
 	public String toString() {
 		return "WebtoonVO [webtoonId=" + webtoonId + ", webtoonName=" + webtoonName + ", webtoonThumbnail_s="
-				+ webtoonThumbnail_s + ", webtoonIntroduce=" + webtoonIntroduce + ", isNew=" + isNew + ", lastDate="
+				+ webtoonThumbnail_s + ", webtoonThumbnail_m=" + webtoonThumbnail_m + ", webtoonThumbnail_b="
+				+ webtoonThumbnail_b + ", webtoonIntroduce=" + webtoonIntroduce + ", isNew=" + isNew + ", lastDate="
 				+ lastDate + ", day=" + day + ", genre=" + genre + ", platform=" + platform + ", writer=" + writer
 				+ ", isUpdate=" + isUpdate + ", viewCount=" + viewCount + "]";
 	}

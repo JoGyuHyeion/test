@@ -13,6 +13,8 @@ public class UserVO {
 	private String password;
 	private String userType;
 	private Date regDate = new Date();
+	private int episodeCount;
+
 	List<UserRole> roles;
 
 	public String getUid() {
@@ -63,10 +65,18 @@ public class UserVO {
 		this.roles = roles;
 	}
 
+	public int getEpisodeCount() {
+		return episodeCount;
+	}
+
+	public void setEpisodeCount(int episodeCount) {
+		this.episodeCount = episodeCount;
+	}
+
 	@Override
 	public String toString() {
 		return "UserVO [uid=" + uid + ", userId=" + userId + ", password=" + password + ", userType=" + userType
-				+ ", regDate=" + regDate + ", roles=" + roles + "]";
+				+ ", regDate=" + regDate + ", episodeCount=" + episodeCount + ", roles=" + roles + "]";
 	}
 
 }

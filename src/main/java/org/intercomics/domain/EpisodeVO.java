@@ -1,7 +1,8 @@
 package org.intercomics.domain;
 
-
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Component("EpisodeVO")
 public class EpisodeVO {
@@ -11,10 +12,14 @@ public class EpisodeVO {
 	private String episodeId;
 	private String episodeName;
 	private String episodeThumbnail_s;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String episodeThumbnail_m;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String episodeThumbnail_b;
 	private String episodeLink;
 	private String episodeDate;
 	private String episodeTimestamp;
-	private String episodecol;
+	private String charge;
 
 	public int getEpisodeNo() {
 		return episodeNo;
@@ -56,6 +61,22 @@ public class EpisodeVO {
 		this.episodeThumbnail_s = episodeThumbnail_s;
 	}
 
+	public String getEpisodeThumbnail_m() {
+		return episodeThumbnail_m;
+	}
+
+	public void setEpisodeThumbnail_m(String episodeThumbnail_m) {
+		this.episodeThumbnail_m = episodeThumbnail_m;
+	}
+
+	public String getEpisodeThumbnail_b() {
+		return episodeThumbnail_b;
+	}
+
+	public void setEpisodeThumbnail_b(String episodeThumbnail_b) {
+		this.episodeThumbnail_b = episodeThumbnail_b;
+	}
+
 	public String getEpisodeLink() {
 		return episodeLink;
 	}
@@ -80,20 +101,21 @@ public class EpisodeVO {
 		this.episodeTimestamp = episodeTimestamp;
 	}
 
-	public String getEpisodecol() {
-		return episodecol;
+	public String getCharge() {
+		return charge;
 	}
 
-	public void setEpisodecol(String episodecol) {
-		this.episodecol = episodecol;
+	public void setCharge(String charge) {
+		this.charge = charge;
 	}
 
 	@Override
 	public String toString() {
 		return "EpisodeVO [episodeNo=" + episodeNo + ", webtoonId=" + webtoonId + ", episodeId=" + episodeId
-				+ ", episodeName=" + episodeName + ", episodeThumbnail_s=" + episodeThumbnail_s + ", episodeLink="
-				+ episodeLink + ", episodeDate=" + episodeDate + ", episodeTimestamp=" + episodeTimestamp
-				+ ", episodecol=" + episodecol + "]";
+				+ ", episodeName=" + episodeName + ", episodeThumbnail_s=" + episodeThumbnail_s
+				+ ", episodeThumbnail_m=" + episodeThumbnail_m + ", episodeThumbnail_b=" + episodeThumbnail_b
+				+ ", episodeLink=" + episodeLink + ", episodeDate=" + episodeDate + ", episodeTimestamp="
+				+ episodeTimestamp + ", charge=" + charge + "]";
 	}
 
 }

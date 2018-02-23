@@ -7,8 +7,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-	<select id="getStatisticsByPlayform" resultType="StatisticsVO">
-		select platform as name,count(platform)as count from
+	<select id="getStatisticsByPlatform" resultType="StatisticsVO">
+		select platform as type,count(platform)as value from
 		(SELECT * from
 		recentwebtoon
 		natural join day
@@ -21,12 +21,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		genre
 		where
 		<include refid="userFilter"></include>
-		group by platform order by count desc
+		group by platform order by value desc
 		<include refid="perScroll"></include>
 	</select>
 
 	<select id="getStatisticsByGenre" resultType="StatisticsVO">
-		select genre as name,count(genre)as count from
+		select genre as type,count(genre)as value from
 		(SELECT * from
 		recentwebtoon natural
 		join day
@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		genre
 		where
 		<include refid="userFilter"></include>
-		group by genre order by count desc
+		group by genre order by value desc
 		<include refid="perScroll"></include>
 	</select>
 
