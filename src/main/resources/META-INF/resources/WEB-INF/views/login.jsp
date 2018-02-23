@@ -11,7 +11,7 @@
 </head>
 <body>
 	<div>
-V2
+
 		<h1>로그인을 해봅시다.!!</h1>
 
 		<form action="/loginProcessing" method="post">
